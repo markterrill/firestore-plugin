@@ -17,5 +17,8 @@
     "paths": {
       "@ngxs-labs/firestore-plugin": ["src/public-api.ts"]
     }
+  },
+  "angularCompilerOptions": {
+    "enableIvy": true
   }
 }

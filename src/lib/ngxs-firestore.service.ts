@@ -1,4 +1,4 @@
-import { QueryFn, QueryDocumentSnapshot } from '@angular/fire/firestore';
+import { QueryFn, QueryDocumentSnapshot } from '@angular/fire/compat/firestore';
 import { Observable, from, of } from 'rxjs';
 import { Inject, Injectable } from '@angular/core';
 import { map, mapTo, timeoutWith } from 'rxjs/operators';
@@ -18,7 +18,8 @@ export abstract class NgxsFirestore<T> {
 
   protected abstract path: string;
   protected idField: string = 'id';
-  protected converter: firebase.firestore.FirestoreDataConverter<T> = {
+
+  protected converter = {
     toFirestore: (value) => {
       return value;
     },
@@ -36,7 +37,7 @@ export abstract class NgxsFirestore<T> {
       .doc<T>(this.docRef(id))
       .snapshotChanges()
       .pipe(
-        map((docSnapshot) => {
+        map((docSnapshot: any) => {
           if (docSnapshot.payload.exists) {
             return this.getDataWithId(docSnapshot.payload);
           } else {

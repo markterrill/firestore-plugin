@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { NgxsFirestore } from '@ngxs-labs/firestore-plugin';
-import firebase from 'firebase/app';
+//import firebase from 'firebase/app';
 import 'firebase/firestore';
 import { Race } from '../models/race';
 
@@ -11,7 +11,7 @@ export class RacesFirestore extends NgxsFirestore<Race> {
   protected path = 'races';
   idField = 'raceId';
 
-  converter: firebase.firestore.FirestoreDataConverter<Race> = {
+  converter = {
     toFirestore: (value) => {
       const db = { ...value };
       delete db.testProp;
