@@ -10,11 +10,17 @@
     "type": "git",
     "url": "https://github.com/ngxs-labs/firestore-plugin"
   },
+  "scripts": {
+    "build:lib": "ng-packagr"
+  },
   "license": "MIT",
   "private": false,
   "keywords": [
     "firestore",
     "ngxs",
     "ngxs-labs"
-  ]
+  ],
+  "devDependencies": {
+    "ng-packagr": "^13.3.1"
+  }
 }
