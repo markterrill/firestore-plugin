@@ -69,8 +69,10 @@ export class NgxsFirestoreConnect implements OnDestroy {
     }
   ) {
     const connectedActionFinishesOn = opts.connectedActionFinishesOn || 'FirstEmit';
+
     const trackBy = opts.trackBy || defaultTrackBy;
     const cancelPrevious = opts.cancelPrevious;
+
 
     interface CompletedHandler {
       actionCompletedHandlerSubject: Subject<unknown>;
@@ -232,6 +234,11 @@ export class NgxsFirestoreConnect implements OnDestroy {
           this.store.dispatch(
             new NgxsFirestoreConnectActions.StreamDisconnected(streamId({ actionType, action, trackBy }))
           );
+
+          console.log('firebase-plugin finalize for ' + streamId({ actionType, action, trackBy }));
+
+          console.log('firebase-plugin finalize active ' + JSON.stringify(this.activeFirestoreConnections[0]));
+
           this.activeFirestoreConnections.splice(
             this.activeFirestoreConnections.indexOf(streamId({ actionType, action, trackBy })),
             1

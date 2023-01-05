@@ -58,6 +58,10 @@ export abstract class NgxsFirestore<T> {
   }
 
   public doc$(id: string): Observable<T> {
+
+    console.info('firestore-plugin firing in doc$');
+
+
     return docSnapshots(this.docRef(id)).pipe(
       map((docSnapshot) => {
         if (docSnapshot.exists()) {
