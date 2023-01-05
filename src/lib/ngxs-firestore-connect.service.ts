@@ -46,7 +46,9 @@ export class NgxsFirestoreConnect implements OnDestroy {
   private activeFirestoreConnections: string[] = [];
   private actionsPending: string[] = [];
 
-  constructor(private store: Store, private actions: Actions) {}
+  constructor(private store: Store, private actions: Actions) {
+    console.log('firestore-plugin connect constructor');
+  }
 
   /**
    * Connect a query that will dispatch a `StreamEmitted` action on each emission.
@@ -162,6 +164,9 @@ export class NgxsFirestoreConnect implements OnDestroy {
             this.actions.pipe(ofActionDispatched(Disconnect)).pipe(
               filter((disconnectAction) => {
                 const { payload } = disconnectAction;
+
+                console.log('firestore-plugin disconnectaction ' + JSON.stringify(payload));
+
                 if (!payload) {
                   return false;
                 }
@@ -170,9 +175,18 @@ export class NgxsFirestoreConnect implements OnDestroy {
                   action: disconnectAction.payload,
                   trackBy
                 });
+
                 if (disconnectedStreamId === streamId({ actionType, action, trackBy })) {
+                  console.log('firestore-plugin disconnectaction TRUE ' + disconnectedStreamId);
                   return true;
                 }
+
+                console.log(
+                  'firestore-plugin disconnectaction FALSE ' +
+                    disconnectedStreamId +
+                    ' | i: ' +
+                    streamId({ actionType, action, trackBy })
+                );
 
                 return false;
               })
@@ -184,18 +198,30 @@ export class NgxsFirestoreConnect implements OnDestroy {
           this.actions.pipe(
             ofActionDispatched(actionType),
             filter((dispatchedAction) => {
-              if (!cancelPrevious) {
-                return false;
-              }
-              //SELF
-              if (dispatchedAction === action) {
-                return false;
-              }
               const dispatchedActionStreamId = streamId({
                 actionType,
                 action: dispatchedAction,
                 trackBy
               });
+
+              if (!cancelPrevious) {
+                console.log('firestore-plugin re-dispatched cancelPrevious FALSE ' + dispatchedActionStreamId);
+
+                return false;
+              }
+              //SELF
+              if (dispatchedAction === action) {
+                console.log('firestore-plugin re-dispatched SELF ' + dispatchedActionStreamId);
+
+                return false;
+              }
+
+              if (dispatchedActionStreamId === streamId({ actionType, action, trackBy })) {
+                console.log('firestore-plugin re-dispatched comparison TRUE ' + dispatchedActionStreamId);
+              } else {
+                console.log('firestore-plugin re-dispatched comparison FALSE ' + dispatchedActionStreamId);
+              }
+
               return dispatchedActionStreamId === streamId({ actionType, action, trackBy });
             })
           )

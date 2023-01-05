@@ -2,11 +2,12 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxsModule } from '@ngxs/store';
 import { NgxsFirestoreState } from './ngxs-firestore.state';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { NgxsFirestoreModuleOptions, NGXS_FIRESTORE_MODULE_OPTIONS } from './tokens';
 import { NgxsFirestorePageIdService } from './ngxs-firestore-page.service';
 
 @NgModule({
-  imports: [CommonModule, NgxsModule.forFeature([NgxsFirestoreState])]
+  imports: [CommonModule, NgxsModule.forFeature([NgxsFirestoreState]), AngularFirestoreModule]
 })
 export class NgxsFirestoreModule {
   public static forRoot(options?: NgxsFirestoreModuleOptions): ModuleWithProviders<NgxsFirestoreModule> {
